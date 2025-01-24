@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const { initGridFS } = require("./utils/gridfs");
 require("dotenv").config();
+const BusinessName = require("./models/BusinessName");
 
 const app = express();
 

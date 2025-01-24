@@ -13,6 +13,7 @@ const {
   deleteFromGridFS,
 } = require("../utils/gridfs");
 const mongoose = require("mongoose");
+const BusinessName = require("../models/BusinessName");
 
 // Auth middleware
 const authMiddleware = async (req, res, next) => {
@@ -167,6 +168,52 @@ router.get("/user-logo", auth, async (req, res) => {
     res.json(logo || null);
   } catch (error) {
     console.error("Logo bilgisi getirme hatası:", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// İşletme adı route'ları
+router.post("/business-name", auth, async (req, res) => {
+  try {
+    const { businessName } = req.body;
+
+    let business = await BusinessName.findOne({ userId: req.userId });
+
+    if (business) {
+      // Eğer businessName boş string ise, kaydı silelim
+      if (!businessName || businessName.trim() === "") {
+        await BusinessName.deleteOne({ _id: business._id });
+        return res.json({ businessName: "" });
+      }
+
+      business.businessName = businessName;
+      await business.save();
+    } else {
+      // Boş değer gönderildiyse yeni kayıt oluşturmayalım
+      if (!businessName || businessName.trim() === "") {
+        return res.json({ businessName: "" });
+      }
+
+      business = new BusinessName({
+        userId: req.userId,
+        businessName,
+      });
+      await business.save();
+    }
+
+    res.json(business);
+  } catch (error) {
+    console.error("Business name update error:", error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+router.get("/business-name", auth, async (req, res) => {
+  try {
+    const business = await BusinessName.findOne({ userId: req.userId });
+    res.json(business || { businessName: "" });
+  } catch (error) {
+    console.error("Business name fetch error:", error);
     res.status(500).json({ message: error.message });
   }
 });

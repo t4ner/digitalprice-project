@@ -4,6 +4,7 @@ const User = require("../models/User");
 const Service = require("../models/Service");
 const Logo = require("../models/Logo");
 const SocialMedia = require("../models/SocialMedia");
+const BusinessName = require("../models/BusinessName");
 
 // Kullanıcı bilgilerini username'e göre getir
 router.get("/theme/:username", async (req, res) => {
@@ -25,11 +26,15 @@ router.get("/theme/:username", async (req, res) => {
     // Kullanıcının sosyal medya bilgilerini getir
     const socialMedia = await SocialMedia.findOne({ userId: user._id });
 
+    // İşletme adını getir
+    const businessName = await BusinessName.findOne({ userId: user._id });
+
     // Tüm bilgileri bir araya getir
     const themeData = {
       user: {
         name: user.name,
         username: user.username,
+        businessName: businessName?.businessName,
       },
       services,
       logo,
@@ -38,6 +43,16 @@ router.get("/theme/:username", async (req, res) => {
         whatsapp: "",
         instagram: "",
         googleMaps: "",
+        address: "",
+        businessHours: {
+          monday: { open: "", close: "" },
+          tuesday: { open: "", close: "" },
+          wednesday: { open: "", close: "" },
+          thursday: { open: "", close: "" },
+          friday: { open: "", close: "" },
+          saturday: { open: "", close: "" },
+          sunday: { open: "", close: "" },
+        },
       },
     };
 

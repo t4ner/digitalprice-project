@@ -19,7 +19,18 @@ const AdminPanel = () => {
     whatsapp: "",
     instagram: "",
     googleMaps: "",
+    address: "",
+    businessHours: {
+      monday: { open: "", close: "" },
+      tuesday: { open: "", close: "" },
+      wednesday: { open: "", close: "" },
+      thursday: { open: "", close: "" },
+      friday: { open: "", close: "" },
+      saturday: { open: "", close: "" },
+      sunday: { open: "", close: "" },
+    },
   });
+  const [businessName, setBusinessName] = useState("");
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -222,6 +233,37 @@ const AdminPanel = () => {
         whatsapp: data.whatsapp || "",
         instagram: data.instagram || "",
         googleMaps: data.googleMaps || "",
+        address: data.address || "",
+        businessHours: {
+          monday: {
+            open: data.businessHours?.monday?.open || "",
+            close: data.businessHours?.monday?.close || "",
+          },
+          tuesday: {
+            open: data.businessHours?.tuesday?.open || "",
+            close: data.businessHours?.tuesday?.close || "",
+          },
+          wednesday: {
+            open: data.businessHours?.wednesday?.open || "",
+            close: data.businessHours?.wednesday?.close || "",
+          },
+          thursday: {
+            open: data.businessHours?.thursday?.open || "",
+            close: data.businessHours?.thursday?.close || "",
+          },
+          friday: {
+            open: data.businessHours?.friday?.open || "",
+            close: data.businessHours?.friday?.close || "",
+          },
+          saturday: {
+            open: data.businessHours?.saturday?.open || "",
+            close: data.businessHours?.saturday?.close || "",
+          },
+          sunday: {
+            open: data.businessHours?.sunday?.open || "",
+            close: data.businessHours?.sunday?.close || "",
+          },
+        },
       });
     } catch (err) {
       setError(err.message);
@@ -281,12 +323,56 @@ const AdminPanel = () => {
     }
   };
 
+  // İşletme adı güncelleme fonksiyonu
+  const handleBusinessNameUpdate = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/business-name", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ businessName }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Geschäftsname konnte nicht aktualisiert werden");
+      }
+
+      setSuccess("Geschäftsname erfolgreich aktualisiert");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // İşletme adını getirme fonksiyonu
+  const fetchBusinessName = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/business-name", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Geschäftsname konnte nicht geladen werden");
+      }
+
+      const data = await response.json();
+      setBusinessName(data.businessName || "");
+    } catch (err) {
+      console.error("Business name fetch error:", err);
+      setError(err.message);
+    }
+  };
+
   useEffect(() => {
     if (!checkAuth()) return;
 
     fetchServices();
     fetchLogo();
     fetchSocialMedia();
+    fetchBusinessName();
   }, [navigate]);
 
   useEffect(() => {
@@ -320,14 +406,14 @@ const AdminPanel = () => {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
           {/* Logo Section */}
           <motion.div
-            className="p-6 rounded-lg shadow-xl bg-white/10 backdrop-blur-md"
+            className="p-6 rounded-lg shadow-xl bg-white/10 backdrop-blur-md flex flex-col justify-center min-h-[400px]"
             variants={itemVariants}
           >
             <h2 className="mb-4 text-xl font-semibold text-white">Logo</h2>
 
-            <div className="flex flex-col items-center space-y-4">
+            <div className="flex flex-col items-center justify-center flex-1 space-y-4">
               {logo && logo.fileId ? (
-                <div className="flex flex-col items-center space-y-4">
+                <div className="flex flex-col items-center space-y-10">
                   <div className="relative">
                     <img
                       src={`http://localhost:3000/api/logo/${logo.fileId}`}
@@ -489,11 +575,35 @@ const AdminPanel = () => {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.95 }}
                 type="submit"
-                className="w-full px-6 py-3 text-white transition-colors bg-green-500 rounded-lg shadow-lg hover:bg-green-600"
+                className="w-full px-6 py-3 mb-6 text-white transition-colors bg-green-500 rounded-lg shadow-lg hover:bg-green-600"
               >
                 Dienstleistung hinzufügen
               </motion.button>
             </form>
+
+            {/* İşletme Adı Alanı */}
+            <div className="pt-6 mt-6 border-t border-gray-700">
+              <h3 className="mb-4 text-lg font-medium text-white">
+                Geschäftsname
+              </h3>
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  value={businessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
+                  className="w-full px-4 py-2 text-white border border-gray-700 rounded-lg bg-gray-800/50 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Geben Sie Ihren Geschäftsnamen ein"
+                />
+                <motion.button
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleBusinessNameUpdate}
+                  className="w-full px-6 py-3 text-white transition-colors bg-green-500 rounded-lg shadow-lg hover:bg-green-600"
+                >
+                  Geschäftsname aktualisieren
+                </motion.button>
+              </div>
+            </div>
           </motion.div>
         </div>
 
@@ -552,7 +662,7 @@ const AdminPanel = () => {
           variants={itemVariants}
         >
           <h2 className="mb-6 text-xl font-semibold text-white">
-            Soziale Medien Links
+            Kontaktdaten & Öffnungszeiten
           </h2>
           <form onSubmit={handleSocialMediaSubmit} className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
@@ -623,13 +733,74 @@ const AdminPanel = () => {
               </div>
             </div>
 
+            {/* Adres alanı */}
+            <div>
+              <label className="block mb-2 text-sm font-medium text-gray-300">
+                Adresse
+              </label>
+              <textarea
+                value={socialMedia.address}
+                onChange={(e) =>
+                  setSocialMedia({ ...socialMedia, address: e.target.value })
+                }
+                className="w-full px-4 py-2 text-white border border-gray-700 rounded-lg bg-gray-800/50 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                rows="3"
+              />
+            </div>
+
+            {/* Çalışma saatleri */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-white">Öffnungszeiten</h3>
+              {Object.entries(socialMedia.businessHours).map(([day, hours]) => (
+                <div key={day} className="grid items-center grid-cols-3 gap-4">
+                  <span className="text-gray-300 capitalize">
+                    {day === "monday" && "Montag"}
+                    {day === "tuesday" && "Dienstag"}
+                    {day === "wednesday" && "Mittwoch"}
+                    {day === "thursday" && "Donnerstag"}
+                    {day === "friday" && "Freitag"}
+                    {day === "saturday" && "Samstag"}
+                    {day === "sunday" && "Sonntag"}
+                  </span>
+                  <input
+                    type="time"
+                    value={hours.open}
+                    onChange={(e) =>
+                      setSocialMedia({
+                        ...socialMedia,
+                        businessHours: {
+                          ...socialMedia.businessHours,
+                          [day]: { ...hours, open: e.target.value },
+                        },
+                      })
+                    }
+                    className="px-3 py-2 text-white border border-gray-700 rounded-lg bg-gray-800/50 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <input
+                    type="time"
+                    value={hours.close}
+                    onChange={(e) =>
+                      setSocialMedia({
+                        ...socialMedia,
+                        businessHours: {
+                          ...socialMedia.businessHours,
+                          [day]: { ...hours, close: e.target.value },
+                        },
+                      })
+                    }
+                    className="px-3 py-2 text-white border border-gray-700 rounded-lg bg-gray-800/50 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              ))}
+            </div>
+
             <motion.button
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.95 }}
               type="submit"
               className="w-full px-6 py-3 text-white transition-colors bg-green-500 rounded-lg shadow-lg hover:bg-green-600"
             >
-              Soziale Medien Links aktualisieren
+              Aktualisieren
             </motion.button>
           </form>
         </motion.div>
