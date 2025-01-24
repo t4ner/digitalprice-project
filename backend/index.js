@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const { initGridFS } = require("./utils/gridfs");
 require("dotenv").config();
 
 const app = express();
@@ -28,6 +29,8 @@ mongoose
   .connect(mongoURI)
   .then(() => {
     console.log("MongoDB'ye başarıyla bağlandı");
+    // GridFS'i başlat
+    initGridFS(mongoose.connection.db);
   })
   .catch((err) => {
     console.error("MongoDB bağlantı hatası:", err);

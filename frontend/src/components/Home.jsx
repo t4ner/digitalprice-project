@@ -26,10 +26,10 @@ const Home = () => {
       >
         {/* Hero Section */}
         <div className="py-16 text-center">
-          <h1 className="mb-6 text-5xl font-bold text-white">
+          <h1 className="mb-6 text-3xl font-bold text-white md:text-5xl">
             Friseur-Preislisten-Management
           </h1>
-          <p className="mb-8 text-xl text-gray-300">
+          <p className="mb-8 text-lg text-gray-300 md:text-xl">
             Verwalten Sie Ihre Preisliste digital und erreichen Sie Ihre Kunden
             ganz einfach
           </p>
@@ -91,20 +91,46 @@ const Home = () => {
         <div className="p-8 mt-12 bg-white shadow-lg rounded-xl">
           <div className="grid gap-8 text-center md:grid-cols-3">
             <div>
-              <h4 className="text-4xl font-bold text-indigo-600">500+</h4>
+              <h4 className="text-3xl font-bold text-indigo-600 md:text-4xl">50+</h4>
               <p className="mt-2 text-gray-600">Aktive Betriebe</p>
             </div>
             <div>
-              <h4 className="text-4xl font-bold text-indigo-600">50K+</h4>
+              <h4 className="text-3xl font-bold text-indigo-600 md:text-4xl">10K+</h4>
               <p className="mt-2 text-gray-600">Preisansichten</p>
             </div>
             <div>
-              <h4 className="text-4xl font-bold text-indigo-600">100%</h4>
+              <h4 className="text-3xl font-bold text-indigo-600 md:text-4xl">100%</h4>
               <p className="mt-2 text-gray-600">Benutzerfreundlich</p>
             </div>
           </div>
         </div>
       </motion.div>
+      <div className="flex flex-col items-center justify-center gap-4 mt-20">
+        <div className="flex items-center justify-center gap-8">
+          <a
+            href="https://ttyazilim.com.tr"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="/ttyazilim.png"
+              alt="TT Yazılım Logo"
+              className="object-contain h-12 transition-opacity hover:opacity-80"
+            />
+          </a>
+          <a
+            href="https://macaree.de"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="/macaree.png"
+              alt="Macaree Logo"
+              className="object-contain h-12 transition-opacity hover:opacity-80"
+            />
+          </a>
+        </div>
+      </div>
     </div>
   );
 };

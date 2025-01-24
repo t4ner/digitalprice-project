@@ -1,0 +1,67 @@
+.price-list-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.price-list-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  font-family: "Playfair Display", serif;
+}
+
+.price-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.price-item {
+  display: flex;
+  align-items: baseline;
+  font-size: 1.1rem;
+  padding: 10px 0;
+  border-bottom: 1px dashed #ddd;
+}
+
+.service-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.price-dots {
+  flex: 1;
+  border-bottom: 1px dotted #999;
+  margin: 0 10px;
+}
+
+.service-price {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.price-item:hover {
+  background-color: #f8f9fa;
+  transform: translateX(5px);
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 600px) {
+  .price-list-container {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .price-list-title {
+    font-size: 2rem;
+  }
+
+  .price-item {
+    font-size: 1rem;
+  }
+}

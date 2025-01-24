@@ -47,7 +47,7 @@ const Login = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md p-8 shadow-2xl bg-white/10 backdrop-blur-md rounded-2xl"
+        className="w-full max-w-md p-8 mx-2 shadow-2xl md:mx-0 bg-white/10 backdrop-blur-md rounded-2xl"
       >
         <motion.div
           initial={{ opacity: 0 }}
@@ -103,7 +103,7 @@ const Login = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
             type="submit"
-            className="flex justify-center w-full px-4 py-3 text-sm font-medium text-white bg-black border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+            className="flex justify-center w-full px-4 py-3.5 text-sm font-medium text-white bg-black border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
           >
             Einloggen
           </motion.button>
@@ -118,18 +118,11 @@ const Login = () => {
           Sie haben noch kein Konto? <br />
           <a
             href="mailto:ttanerdokmetas@gmail.com"
-            className="text-purple-600 hover:text-purple-500"
+            className="text-purple-300 hover:text-purple-500"
           >
             Kontaktieren Sie uns
           </a>
         </motion.p>
-
-        <p className="mt-4 text-center text-white">
-          Noch kein Konto?{" "}
-          <Link to="/signup" className="text-purple-400 hover:text-purple-300">
-            Registrieren
-          </Link>
-        </p>
 
         {error && (
           <motion.p

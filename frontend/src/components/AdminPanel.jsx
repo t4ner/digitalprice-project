@@ -90,9 +90,9 @@ const AdminPanel = () => {
       });
 
       if (!response.ok)
-        throw new Error("Service konnte nicht hinzugefügt werden");
+        throw new Error("Dienstleistung konnte nicht hinzugefügt werden");
 
-      setSuccess("Service erfolgreich hinzugefügt");
+      setSuccess("Dienstleistung erfolgreich hinzugefügt");
       setNewService({ name: "", price: "" });
       fetchServices();
     } catch (err) {
@@ -102,27 +102,19 @@ const AdminPanel = () => {
 
   // Logo'ları getir
   const fetchLogo = async () => {
-    if (!checkAuth()) return;
-
     try {
-      const response = await fetch("http://localhost:3000/api/logo", {
+      const response = await fetch("http://localhost:3000/api/user-logo", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          localStorage.removeItem("token");
-          navigate("/login");
-          return;
-        }
-        throw new Error("Logo konnte nicht geladen werden");
-      }
+      if (!response.ok) throw new Error("Logo konnte nicht geladen werden");
 
-      const data = await response.json();
-      setLogo(data);
+      const logoData = await response.json();
+      setLogo(logoData);
     } catch (err) {
+      console.error("Logo fetch error:", err);
       setError(err.message);
     }
   };
@@ -146,9 +138,10 @@ const AdminPanel = () => {
 
       if (!response.ok) throw new Error("Logo konnte nicht hochgeladen werden");
 
+      const updatedLogo = await response.json();
+      setLogo(updatedLogo);
       setSuccess("Logo erfolgreich hochgeladen");
       setSelectedFile(null);
-      fetchLogo();
     } catch (err) {
       setError(err.message);
     }
@@ -193,7 +186,7 @@ const AdminPanel = () => {
           navigate("/login");
           return;
         }
-        throw new Error("Services konnten nicht geladen werden");
+        throw new Error("Dienstleistungen konnten nicht geladen werden");
       }
 
       const data = await response.json();
@@ -220,7 +213,7 @@ const AdminPanel = () => {
           navigate("/login");
           return;
         }
-        throw new Error("Social Media Links konnten nicht geladen werden");
+        throw new Error("Soziale Medien Links konnten nicht geladen werden");
       }
 
       const data = await response.json();
@@ -252,11 +245,37 @@ const AdminPanel = () => {
       });
 
       if (!response.ok)
-        throw new Error("Social Media Links konnten nicht aktualisiert werden");
+        throw new Error(
+          "Soziale Medien Links konnten nicht aktualisiert werden"
+        );
 
       const data = await response.json();
       setSocialMedia(data);
-      setSuccess("Social Media Links erfolgreich aktualisiert");
+      setSuccess("Soziale Medien Links erfolgreich aktualisiert");
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // Servis silme fonksiyonu
+  const handleDeleteService = async (serviceId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/services/${serviceId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Dienstleistung konnte nicht gelöscht werden");
+      }
+
+      setSuccess("Dienstleistung erfolgreich gelöscht");
+      fetchServices(); // Servisleri yeniden yükle
     } catch (err) {
       setError(err.message);
     }
@@ -293,9 +312,8 @@ const AdminPanel = () => {
           variants={itemVariants}
         >
           <h1 className="text-3xl font-bold text-transparent bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text">
-            Admin Panel
+            Verwaltungspanel
           </h1>
-          
         </motion.div>
 
         {/* Logo and Service Form Container */}
@@ -307,66 +325,125 @@ const AdminPanel = () => {
           >
             <h2 className="mb-4 text-xl font-semibold text-white">Logo</h2>
 
-            <AnimatePresence mode="wait">
-              {logo && logo.imageUrl ? (
-                <motion.div
-                  key="logo"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className="mb-4"
-                >
-                  <div className="flex flex-col items-center gap-4">
-                    <img
-                      src={`http://localhost:3000${logo.imageUrl}`}
-                      alt="Current Logo"
-                      className="object-contain w-48 h-48 rounded-lg ring-2 ring-blue-400/50"
-                    />
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={handleDeleteLogo}
-                      className="px-4 py-2 text-white transition-colors bg-red-500 rounded-lg shadow-lg hover:bg-red-600"
-                    >
-                      Logo löschen
-                    </motion.button>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.form
-                  key="upload"
-                  onSubmit={handleLogoUpload}
-                  className="space-y-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
+            <div className="flex flex-col items-center space-y-4">
+              {logo && logo.fileId ? (
+                <div className="flex flex-col items-center space-y-4">
                   <div className="relative">
-                    <label className="block mb-2 text-sm font-medium text-gray-300">
-                      Logo hochladen
-                    </label>
-                    <input
-                      type="file"
-                      onChange={(e) => setSelectedFile(e.target.files[0])}
-                      className="block w-full text-gray-300 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 focus:outline-none"
-                      accept="image/*"
+                    <img
+                      src={`http://localhost:3000/api/logo/${logo.fileId}`}
+                      alt="Current Logo"
+                      className="object-contain w-48 h-48 p-2 transition-transform duration-300 rounded-lg ring-2 ring-blue-400/50"
                     />
+                  </div>
+                  <div className="flex flex-col items-center space-y-2">
+                    <motion.button
+                      onClick={handleDeleteLogo}
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center justify-center w-full gap-2 px-6 py-3 text-white transition-colors bg-red-500 rounded-lg shadow-lg hover:bg-red-600"
+                      title="Logo löschen"
+                    >
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                      <span className="">Logo löschen</span>
+                    </motion.button>
+                    <p className="text-xs text-gray-500">
+                      Löschen Sie das Logo, um ein neues hochzuladen
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="w-full max-w-md">
+                  <div className="flex items-center justify-center w-full">
+                    <label
+                      htmlFor="logo-upload"
+                      className="flex flex-col items-center justify-center w-full h-48 transition-colors duration-300 border-2 border-gray-500 border-dashed rounded-lg cursor-pointer bg-gray-800/30 hover:bg-gray-800/50"
+                    >
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg
+                          className="w-10 h-10 mb-3 text-gray-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                          ></path>
+                        </svg>
+                        <p className="px-2 mb-2 text-sm text-gray-400">
+                          <span className="font-semibold">
+                            Klicken Sie zum Hochladen
+                          </span>{" "}
+                          oder ziehen Sie eine Datei hierher
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          PNG, JPG (MAX. 5MB)
+                        </p>
+                      </div>
+                      <input
+                        id="logo-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setSelectedFile(e.target.files[0])}
+                        className="hidden"
+                        disabled={logo && logo.fileId}
+                      />
+                    </label>
                   </div>
                   {selectedFile && (
-                    <motion.button
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      type="submit"
-                      className="px-4 py-2 text-white transition-colors bg-blue-500 rounded-lg shadow-lg hover:bg-blue-600"
-                    >
-                      Logo hochladen
-                    </motion.button>
+                    <div className="mt-4">
+                      <div className="flex items-center justify-between p-2 rounded-lg bg-gray-800/50">
+                        <span className="text-sm text-gray-300 truncate">
+                          {selectedFile.name}
+                        </span>
+                        <button
+                          onClick={() => setSelectedFile(null)}
+                          className="p-1 text-gray-400 hover:text-red-400"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M6 18L18 6M6 6l12 12"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                      <motion.button
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={handleLogoUpload}
+                        className="w-full px-4 py-2 mt-2 text-white transition-colors duration-300 bg-blue-500 rounded-lg hover:bg-blue-600"
+                      >
+                        Logo hochladen
+                      </motion.button>
+                    </div>
                   )}
-                </motion.form>
+                </div>
               )}
-            </AnimatePresence>
+            </div>
           </motion.div>
 
           {/* Service Form */}
@@ -375,7 +452,7 @@ const AdminPanel = () => {
             variants={itemVariants}
           >
             <h2 className="mb-6 text-xl font-semibold text-white">
-              Service hinzufügen
+              Dienstleistung hinzufügen
             </h2>
             <form onSubmit={handleServiceSubmit}>
               <div className="grid gap-6 mb-6">
@@ -414,7 +491,7 @@ const AdminPanel = () => {
                 type="submit"
                 className="w-full px-6 py-3 text-white transition-colors bg-green-500 rounded-lg shadow-lg hover:bg-green-600"
               >
-                Service hinzufügen
+                Dienstleistung hinzufügen
               </motion.button>
             </form>
           </motion.div>
@@ -428,7 +505,7 @@ const AdminPanel = () => {
           variants={itemVariants}
         >
           <h2 className="mb-6 text-xl font-semibold text-white">
-            Aktuelle Services
+            Aktuelle Dienstleistungen
           </h2>
           <div className="space-y-4">
             <AnimatePresence>
@@ -440,7 +517,27 @@ const AdminPanel = () => {
                   exit={{ opacity: 0, x: 20 }}
                   className="flex items-center justify-between p-4 transition-colors rounded-lg bg-gray-800/50 hover:bg-gray-700/50"
                 >
-                  <div>
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => handleDeleteService(service._id)}
+                      className="p-1.5 text-gray-400 hover:text-red-400 transition-colors"
+                      title="Service löschen"
+                    >
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                    </button>
                     <h3 className="font-medium text-white">{service.name}</h3>
                   </div>
                   <p className="font-medium text-green-400">{service.price}€</p>
@@ -455,7 +552,7 @@ const AdminPanel = () => {
           variants={itemVariants}
         >
           <h2 className="mb-6 text-xl font-semibold text-white">
-            Social Media Links
+            Soziale Medien Links
           </h2>
           <form onSubmit={handleSocialMediaSubmit} className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2">
@@ -532,7 +629,7 @@ const AdminPanel = () => {
               type="submit"
               className="w-full px-6 py-3 text-white transition-colors bg-green-500 rounded-lg shadow-lg hover:bg-green-600"
             >
-              Social Media Links aktualisieren
+              Soziale Medien Links aktualisieren
             </motion.button>
           </form>
         </motion.div>

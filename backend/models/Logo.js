@@ -6,7 +6,15 @@ const logoSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  imageUrl: {
+  filename: {
+    type: String,
+    required: true,
+  },
+  fileId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
+  contentType: {
     type: String,
     required: true,
   },
@@ -17,16 +25,23 @@ const logoSchema = new mongoose.Schema({
 });
 
 // Her kullanıcı için tek logo olmasını sağla
-logoSchema.statics.updateLogo = async function (userId, imageUrl) {
+logoSchema.statics.updateLogo = async function (userId, fileInfo) {
   const logo = await this.findOne({ userId });
   if (logo) {
     // Mevcut logoyu güncelle
-    logo.imageUrl = imageUrl;
+    logo.filename = fileInfo.filename;
+    logo.fileId = fileInfo.fileId;
+    logo.contentType = fileInfo.contentType;
     logo.updatedAt = Date.now();
     return await logo.save();
   } else {
     // Yeni logo oluştur
-    return await this.create({ userId, imageUrl });
+    return await this.create({
+      userId,
+      filename: fileInfo.filename,
+      fileId: fileInfo.fileId,
+      contentType: fileInfo.contentType,
+    });
   }
 };
 

@@ -51,14 +51,14 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex items-center justify-center w-screen h-screen">
+    <div className="flex items-center justify-center w-screen h-screen px-2">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="w-full max-w-md p-8 shadow-2xl bg-white/10 backdrop-blur-md rounded-2xl"
       >
-        <h2 className="mb-6 text-3xl font-bold text-center text-white">
+        <h2 className="mb-8 text-3xl font-bold text-center text-white">
           Registrieren
         </h2>
         {error && (
@@ -81,7 +81,7 @@ const Signup = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full p-2 bg-white/10 border border-gray-600 rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white"
+              className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
           <div>
@@ -98,7 +98,7 @@ const Signup = () => {
               value={formData.username}
               onChange={handleChange}
               required
-              className="w-full p-2 bg-white/10 border border-gray-600 rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white"
+              className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
           <div>
@@ -115,7 +115,7 @@ const Signup = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full p-2 bg-white/10 border border-gray-600 rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white"
+              className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
           <div>
@@ -132,22 +132,16 @@ const Signup = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full p-2 bg-white/10 border border-gray-600 rounded focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white"
+              className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             />
           </div>
           <button
             type="submit"
-            className="w-full px-4 py-2 text-white bg-purple-600 rounded hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+            className="flex justify-center w-full px-4 py-3.5 text-sm font-medium text-white bg-black border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
           >
             Registrieren
           </button>
         </form>
-        <p className="mt-4 text-center text-white">
-          Bereits ein Konto?{" "}
-          <Link to="/login" className="text-purple-400 hover:text-purple-300">
-            Anmelden
-          </Link>
-        </p>
       </motion.div>
     </div>
   );
