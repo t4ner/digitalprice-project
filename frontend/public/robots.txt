@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: 
+
+User-agent: Googlebot
+Disallow:
+
+User-agent: googlebot-image
+Disallow:
+
+User-agent: googlebot-mobile
+Disallow:
+
+Sitemap: https://my-barbershop.de/sitemap.xml 

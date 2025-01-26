@@ -89,7 +89,7 @@ const Theme = () => {
                 <div className="relative">
                   <div className="p-[1px] rounded-full bg-gradient-to-r from-amber-400/80 to-amber-600/80">
                     <div className="p-1 rounded-full bg-zinc-900">
-                      <div className="w-40 h-40 overflow-hidden rounded-full md:w-[500px] md:h-[500px]">
+                      <div className="w-40 h-40 overflow-hidden rounded-full md:w-[300px] md:h-[300px]">
                         <img
                           src={`http://localhost:3000/api/logo/${themeData.logo.fileId}`}
                           alt="Logo"
@@ -247,7 +247,7 @@ const Theme = () => {
               {themeData.socialMedia.whatsapp && (
                 <a
                   href={`https://wa.me/+49${themeData.socialMedia.whatsapp.replace(
-                    /\+/g,
+                    /[\s+]/g,
                     ""
                   )}`}
                   target="_blank"
