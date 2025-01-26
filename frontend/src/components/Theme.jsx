@@ -7,13 +7,6 @@ import {
   FaPhone,
   FaMapMarkerAlt,
 } from "react-icons/fa";
-import {
-  GiRazor,
-  GiBeard,
-  GiScissors,
-  GiRazorBlade,
-  GiComb,
-} from "react-icons/gi";
 
 const Theme = () => {
   const { username } = useParams();
@@ -158,7 +151,7 @@ const Theme = () => {
                 <span className="text-base text-gray-100 md:text-lg">
                   {service.name}
                 </span>
-                <span className="text-lg font-semibold md:text-xl text-amber-400">
+                <span className="font-medium md:text-xl text-amber-400">
                   {service.price}€
                 </span>
               </div>
@@ -242,7 +235,7 @@ const Theme = () => {
             </h2>
           </div>
           <div className="p-4 md:p-6">
-            <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center justify-center gap-8">
               {themeData.socialMedia.phone && (
                 <a
                   href={`tel:${themeData.socialMedia.phone}`}
@@ -253,7 +246,7 @@ const Theme = () => {
               )}
               {themeData.socialMedia.whatsapp && (
                 <a
-                  href={`https://wa.me/${themeData.socialMedia.whatsapp.replace(
+                  href={`https://wa.me/+49${themeData.socialMedia.whatsapp.replace(
                     /\+/g,
                     ""
                   )}`}
