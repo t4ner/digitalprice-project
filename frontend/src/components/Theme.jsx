@@ -161,46 +161,50 @@ const Theme = () => {
 
         {/* Business Hours & Address Section */}
         <div className="grid gap-6 md:grid-cols-2">
-          {/* Business Hours */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="border bg-zinc-900/50 backdrop-blur-sm rounded-2xl border-zinc-800"
-          >
-            <div className="p-4 border-b md:p-6 border-zinc-800">
-              <h2 className="text-xl font-semibold text-white md:text-2xl">
-                Öffnungszeiten
-              </h2>
-            </div>
-            <div className="p-4 space-y-3 md:p-6">
-              {Object.entries(themeData.socialMedia.businessHours).map(
-                ([day, hours]) => {
-                  if (!hours.open && !hours.close) return null;
-                  return (
-                    <div
-                      key={day}
-                      className="flex items-center justify-between"
-                    >
-                      <span className="font-medium text-gray-300 md:text-base">
-                        {day === "monday" && "Montag"}
-                        {day === "tuesday" && "Dienstag"}
-                        {day === "wednesday" && "Mittwoch"}
-                        {day === "thursday" && "Donnerstag"}
-                        {day === "friday" && "Freitag"}
-                        {day === "saturday" && "Samstag"}
-                        {day === "sunday" && "Sonntag"}
-                      </span>
-                      <span className="font-medium md:text-base text-amber-400">
-                        {hours.open && hours.close
-                          ? `${hours.open} - ${hours.close}`
-                          : "Geschlossen"}
-                      </span>
-                    </div>
-                  );
-                }
-              )}
-            </div>
-          </motion.div>
+          {/* Business Hours - Only show if there are business hours */}
+          {Object.values(themeData.socialMedia.businessHours).some(
+            (hours) => hours.open && hours.close
+          ) && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="border bg-zinc-900/50 backdrop-blur-sm rounded-2xl border-zinc-800"
+            >
+              <div className="p-4 border-b md:p-6 border-zinc-800">
+                <h2 className="text-xl font-semibold text-white md:text-2xl">
+                  Öffnungszeiten
+                </h2>
+              </div>
+              <div className="p-4 space-y-3 md:p-6">
+                {Object.entries(themeData.socialMedia.businessHours).map(
+                  ([day, hours]) => {
+                    if (!hours.open && !hours.close) return null;
+                    return (
+                      <div
+                        key={day}
+                        className="flex items-center justify-between"
+                      >
+                        <span className="font-medium text-gray-300 md:text-base">
+                          {day === "monday" && "Montag"}
+                          {day === "tuesday" && "Dienstag"}
+                          {day === "wednesday" && "Mittwoch"}
+                          {day === "thursday" && "Donnerstag"}
+                          {day === "friday" && "Freitag"}
+                          {day === "saturday" && "Samstag"}
+                          {day === "sunday" && "Sonntag"}
+                        </span>
+                        <span className="font-medium md:text-base text-amber-400">
+                          {hours.open && hours.close
+                            ? `${hours.open} - ${hours.close}`
+                            : "Geschlossen"}
+                        </span>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            </motion.div>
+          )}
 
           {/* Address Section */}
           {themeData.socialMedia.address && (
@@ -223,63 +227,68 @@ const Theme = () => {
           )}
         </div>
 
-        {/* Contact Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="border bg-zinc-900/50 backdrop-blur-sm rounded-2xl border-zinc-800"
-        >
-          <div className="p-4 border-b md:p-6 border-zinc-800">
-            <h2 className="text-xl font-semibold text-white md:text-2xl">
-              Kontakt
-            </h2>
-          </div>
-          <div className="p-4 md:p-6">
-            <div className="flex flex-wrap items-center justify-center gap-8">
-              {themeData.socialMedia.phone && (
-                <a
-                  href={`tel:${themeData.socialMedia.phone}`}
-                  className="flex items-center justify-center w-10 h-10 transition-colors rounded-lg bg-white/5 hover:bg-white/10"
-                >
-                  <FaPhone className="w-5 h-5 text-amber-400" />
-                </a>
-              )}
-              {themeData.socialMedia.whatsapp && (
-                <a
-                  href={`https://wa.me/+49${themeData.socialMedia.whatsapp.replace(
-                    /[\s+]/g,
-                    ""
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 transition-colors rounded-lg bg-white/5 hover:bg-white/10"
-                >
-                  <FaWhatsapp className="w-5 h-5 text-amber-400" />
-                </a>
-              )}
-              {themeData.socialMedia.instagram && (
-                <a
-                  href={themeData.socialMedia.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 transition-colors rounded-lg bg-white/5 hover:bg-white/10"
-                >
-                  <FaInstagram className="w-5 h-5 text-amber-400" />
-                </a>
-              )}
-              {themeData.socialMedia.googleMaps && (
-                <a
-                  href={themeData.socialMedia.googleMaps}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 transition-colors rounded-lg bg-white/5 hover:bg-white/10"
-                >
-                  <FaMapMarkerAlt className="w-5 h-5 text-amber-400" />
-                </a>
-              )}
+        {/* Contact Section - Only show if there are contact details */}
+        {(themeData.socialMedia.phone ||
+          themeData.socialMedia.whatsapp ||
+          themeData.socialMedia.instagram ||
+          themeData.socialMedia.googleMaps) && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="border bg-zinc-900/50 backdrop-blur-sm rounded-2xl border-zinc-800"
+          >
+            <div className="p-4 border-b md:p-6 border-zinc-800">
+              <h2 className="text-xl font-semibold text-white md:text-2xl">
+                Kontakt
+              </h2>
             </div>
-          </div>
-        </motion.div>
+            <div className="p-4 md:p-6">
+              <div className="flex flex-wrap items-center justify-center gap-8">
+                {themeData.socialMedia.phone && (
+                  <a
+                    href={`tel:${themeData.socialMedia.phone}`}
+                    className="flex items-center justify-center w-10 h-10 transition-colors rounded-lg bg-white/5 hover:bg-white/10"
+                  >
+                    <FaPhone className="w-5 h-5 text-amber-400" />
+                  </a>
+                )}
+                {themeData.socialMedia.whatsapp && (
+                  <a
+                    href={`https://wa.me/+49${themeData.socialMedia.whatsapp.replace(
+                      /[\s+]/g,
+                      ""
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-10 h-10 transition-colors rounded-lg bg-white/5 hover:bg-white/10"
+                  >
+                    <FaWhatsapp className="w-5 h-5 text-amber-400" />
+                  </a>
+                )}
+                {themeData.socialMedia.instagram && (
+                  <a
+                    href={themeData.socialMedia.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-10 h-10 transition-colors rounded-lg bg-white/5 hover:bg-white/10"
+                  >
+                    <FaInstagram className="w-5 h-5 text-amber-400" />
+                  </a>
+                )}
+                {themeData.socialMedia.googleMaps && (
+                  <a
+                    href={themeData.socialMedia.googleMaps}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center w-10 h-10 transition-colors rounded-lg bg-white/5 hover:bg-white/10"
+                  >
+                    <FaMapMarkerAlt className="w-5 h-5 text-amber-400" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
       </div>
 
       {/* Footer Space */}
