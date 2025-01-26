@@ -38,7 +38,7 @@ const Theme = () => {
   }, [username]);
 
   if (loading) {
-    return <div className="min-h-screen text-white">Loading...</div>;
+    return <div className="min-h-screen text-white bg-black">Loading...</div>;
   }
 
   if (error) {
