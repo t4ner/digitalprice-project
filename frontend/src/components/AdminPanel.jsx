@@ -91,7 +91,7 @@ const AdminPanel = () => {
   const handleServiceSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://165.232.76.29:8093/api/services", {
+      const response = await fetch("https://my-barbershop.de/api/services", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +114,7 @@ const AdminPanel = () => {
   // Logo'ları getir
   const fetchLogo = async () => {
     try {
-      const response = await fetch("http://165.232.76.29:8093/api/user-logo", {
+      const response = await fetch("https://my-barbershop.de/api/user-logo", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -139,7 +139,7 @@ const AdminPanel = () => {
     formData.append("logo", selectedFile);
 
     try {
-      const response = await fetch("http://165.232.76.29:8093/api/upload-logo", {
+      const response = await fetch("https://my-barbershop.de/api/upload-logo", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -161,7 +161,7 @@ const AdminPanel = () => {
   // Logo silme fonksiyonu
   const handleDeleteLogo = async () => {
     try {
-      const response = await fetch("http://165.232.76.29:8093/api/logo", {
+      const response = await fetch("https://my-barbershop.de/api/logo", {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -185,7 +185,7 @@ const AdminPanel = () => {
     if (!checkAuth()) return;
 
     try {
-      const response = await fetch("http://165.232.76.29:8093/api/services", {
+      const response = await fetch("https://my-barbershop.de/api/services", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -212,7 +212,7 @@ const AdminPanel = () => {
     if (!checkAuth()) return;
 
     try {
-      const response = await fetch("http://165.232.76.29:8093/api/social-media", {
+      const response = await fetch("https://my-barbershop.de/api/social-media", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -274,7 +274,7 @@ const AdminPanel = () => {
   const handleSocialMediaSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://165.232.76.29:8093/api/social-media", {
+      const response = await fetch("https://my-barbershop.de/api/social-media", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -303,7 +303,7 @@ const AdminPanel = () => {
   const handleDeleteService = async (serviceId) => {
     try {
       const response = await fetch(
-        `http://165.232.76.29:8093/api/services/${serviceId}`,
+        `https://my-barbershop.de/api/services/${serviceId}`,
         {
           method: "DELETE",
           headers: {
@@ -326,7 +326,7 @@ const AdminPanel = () => {
   // İşletme adı güncelleme fonksiyonu
   const handleBusinessNameUpdate = async () => {
     try {
-      const response = await fetch("http://165.232.76.29:8093/api/business-name", {
+      const response = await fetch("https://my-barbershop.de/api/business-name", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -348,7 +348,7 @@ const AdminPanel = () => {
   // İşletme adını getirme fonksiyonu
   const fetchBusinessName = async () => {
     try {
-      const response = await fetch("http://165.232.76.29:8093/api/business-name", {
+      const response = await fetch("https://my-barbershop.de/api/business-name", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -416,7 +416,7 @@ const AdminPanel = () => {
                 <div className="flex flex-col items-center space-y-10">
                   <div className="relative">
                     <img
-                      src={`http://165.232.76.29:8093/api/logo/${logo.fileId}`}
+                      src={`https://my-barbershop.de/api/logo/${logo.fileId}`}
                       alt="Current Logo"
                       className="object-contain w-48 h-48 p-2 transition-transform duration-300 rounded-lg ring-2 ring-blue-400/50"
                     />

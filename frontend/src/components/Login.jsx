@@ -13,7 +13,7 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await fetch("http://165.232.76.29:8093/api/auth/login", {
+      const response = await fetch("https://my-barbershop.de/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

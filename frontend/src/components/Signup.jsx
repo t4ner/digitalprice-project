@@ -25,7 +25,7 @@ const Signup = () => {
     setError("");
 
     try {
-      const response = await fetch("http://165.232.76.29:8093/api/auth/register", {
+      const response = await fetch("https://my-barbershop.de/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
