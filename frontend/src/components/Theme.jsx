@@ -18,7 +18,7 @@ const Theme = () => {
     const fetchThemeData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/theme/${username}`
+          `http://165.232.76.29:8093/api/theme/${username}`
         );
 
         if (!response.ok) {
@@ -91,7 +91,7 @@ const Theme = () => {
                     <div className="p-1 rounded-full bg-zinc-900">
                       <div className="w-40 h-40 overflow-hidden rounded-full md:w-[300px] md:h-[300px]">
                         <img
-                          src={`http://localhost:3000/api/logo/${themeData.logo.fileId}`}
+                          src={`http://165.232.76.29:8093/api/logo/${themeData.logo.fileId}`}
                           alt="Logo"
                           className="object-contain w-full h-full transition-transform duration-500 hover:scale-105"
                         />
